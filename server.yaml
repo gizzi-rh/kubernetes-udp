@@ -1,9 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: udp-server-deployment
 spec:
-  replicas: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      name: udp-server
   template:
     metadata:
       labels:
@@ -11,7 +14,7 @@ spec:
     spec:
       containers:
       - name: udp-server
-        image: jpoon/udp-server
+        image: quay.io/rhn-support-gizzi/udp-server:1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 10001
@@ -25,9 +28,13 @@ metadata:
     app: udp-server
 spec:
   type: LoadBalancer
-  sessionAffinity: ClientIP
+  #allocateLoadBalancerNodePorts: false
+  externalTrafficPolicy: Local
+  internalTrafficPolicy: Local
+  #sessionAffinity: ClientIP
   ports:
-  - port: 10001
+  - port: 20001
     protocol: UDP
+    targetPort: 10001
   selector:
     name: udp-server
