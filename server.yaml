@@ -28,10 +28,7 @@ metadata:
     app: udp-server
 spec:
   type: LoadBalancer
-  #allocateLoadBalancerNodePorts: false
   externalTrafficPolicy: Local
-  internalTrafficPolicy: Local
-  #sessionAffinity: ClientIP
   ports:
   - port: 20001
     protocol: UDP
