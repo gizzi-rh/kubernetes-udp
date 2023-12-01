@@ -30,7 +30,6 @@ metadata:
     service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
-  #allocateLoadBalancerNodePorts: false
   externalTrafficPolicy: Local
   #internalTrafficPolicy: Local
   #sessionAffinity: ClientIP
