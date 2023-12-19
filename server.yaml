@@ -19,27 +19,4 @@ spec:
         ports:
         - containerPort: 10001
           protocol: UDP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: udp-server-service
-  labels:
-    app: udp-server
-  annotations:
-    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-spec:
-  type: LoadBalancer
-  externalTrafficPolicy: Local
-  #internalTrafficPolicy: Local
-  #sessionAffinity: ClientIP
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 300
-  ports:
-  - port: 10001
-    protocol: UDP
-    targetPort: 10001
-  selector:
-    name: udp-server
+
