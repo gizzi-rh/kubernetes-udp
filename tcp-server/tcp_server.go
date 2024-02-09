@@ -48,16 +48,10 @@ func main() {
 
 	for {
 		tcpconn, err := listener.Accept()
-		if err != nil {
-			fmt.Println("Error while accepting: ", err)
-			continue
-		}
+		checkError(err)
 
 		reqString, err := bufio.NewReader(tcpconn).ReadString('\n')
-		if err != nil {
-			fmt.Println("Error while reading from remote: ", err)
-			continue
-		}
+		checkError(err)
 
 		fmt.Println("Received ", reqString, " from ", tcpconn.RemoteAddr().String())
 
