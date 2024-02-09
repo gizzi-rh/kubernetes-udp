@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"net"
 	"os"
 )
@@ -14,13 +15,28 @@ func checkError(err error) {
 	}
 }
 
+func handlingRequest(conn net.Conn, msg []byte) {
+
+	for {
+		reqString, err := bufio.NewReader(conn).ReadString('\n')
+		if err == io.EOF {
+			break
+		}
+
+		fmt.Println("Received ", reqString, " from ", conn.RemoteAddr().String())
+
+		sendResponse(conn, msg)
+
+	}
+
+}
+
 func sendResponse(conn net.Conn, msg []byte) {
 	_, err := conn.Write(msg)
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
 
-	conn.Close()
 }
 
 func main() {
@@ -33,8 +49,7 @@ func main() {
 	fmt.Println("Hostname=" + hostname)
 	checkError(err)
 
-	/* Lets prepare a address at any address at port 10001*/
-	//serverAddr, err := net.ResolveTCPAddr("tcp", ":"+port)
+	/* Lets prepare a address at any address at port 10080*/
 	serverAddr := ":" + port
 	checkError(err)
 
@@ -44,18 +59,13 @@ func main() {
 	defer listener.Close()
 
 	msg := []byte(hostname)
-	//buf := make([]byte, 2048)
 
 	for {
 		tcpconn, err := listener.Accept()
 		checkError(err)
+		defer tcpconn.Close()
 
-		reqString, err := bufio.NewReader(tcpconn).ReadString('\n')
-		checkError(err)
-
-		fmt.Println("Received ", reqString, " from ", tcpconn.RemoteAddr().String())
-
-		go sendResponse(tcpconn, msg)
+		go handlingRequest(tcpconn, msg)
 
 	}
 }
