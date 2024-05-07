@@ -9,12 +9,12 @@ metadata:
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Local
-  allocateLoadBalancerNodePorts: false
+  #allocateLoadBalancerNodePorts: false
   #internalTrafficPolicy: Local
   sessionAffinity: ClientIP
   sessionAffinityConfig:
     clientIP:
-      timeoutSeconds: 120
+      timeoutSeconds: 86400
   ports:
   - port: 10001
     protocol: UDP
